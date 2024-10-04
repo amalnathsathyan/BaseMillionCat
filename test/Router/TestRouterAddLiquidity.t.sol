@@ -48,6 +48,7 @@ contract TestRouterAddLiquidity is Test {
         );
 
         uniV2Pair = IUniswapV2Pair(uniV2Factory.getPair(address(ponzio), WETH));
+        console.log("Univ2PairAddress", address(uniV2Pair));
 
         router = new Router(address(uniV2Pair), address(ponzio));
         stake = new Stake(address(uniV2Pair), address(wrappedPonzioTheCat));
@@ -59,7 +60,7 @@ contract TestRouterAddLiquidity is Test {
     }
 
     function test_addLiquidityWeth() public {
-        pairAddr = UniswapV2Library.pairFor(0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f, address(ponzio), WETH);
+        pairAddr = address(IUniswapV2Pair(uniV2Factory.getPair(address(ponzio), WETH)));
         IWETH(WETH).deposit{ value: 3 ether }();
         IWETH(WETH).approve(address(router), 3 ether);
         ponzio.approve(address(router), 500_000 * 10 ** decimals);
@@ -81,7 +82,7 @@ contract TestRouterAddLiquidity is Test {
     }
 
     function test_addLiquidityEth() public {
-        pairAddr = UniswapV2Library.pairFor(0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f, address(ponzio), WETH);
+        pairAddr = address(IUniswapV2Pair(uniV2Factory.getPair(address(ponzio), WETH)));
         ponzio.approve(address(router), 500_000 * 10 ** decimals);
 
         skip(1 weeks);
