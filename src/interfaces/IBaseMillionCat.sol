@@ -4,7 +4,7 @@ pragma solidity 0.8.25;
 import { IERC20Rebasable } from "src/interfaces/IERC20Rebasable.sol";
 import { IUniswapV2Pair } from "src/interfaces/UniswapV2/IUniswapV2Pair.sol";
 
-interface IPonzioTheCat is IERC20Rebasable {
+interface IBaseMillionCat is IERC20Rebasable {
     /// @notice Error code is thrown when the contract is being initialized a 2nd time.
     error PONZIO_alreadyInitialized();
 

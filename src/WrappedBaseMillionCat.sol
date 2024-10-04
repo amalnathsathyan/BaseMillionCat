@@ -4,21 +4,21 @@ pragma solidity 0.8.25;
 import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { ERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
-import { IWrappedPonzioTheCat } from "src/interfaces/IWrappedPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
+import { IWrappedBaseMillionCat } from "src/interfaces/IWrappedBaseMillionCat.sol";
 
 /**
- * @title WrappedPonzioTheCat
- * @notice Implementation of the WrappedPonzioTheCat.
+ * @title WrappedBaseMillionCat
+ * @notice Implementation of the WrappedBaseMillionCat.
  * This contract is used to wrap and unwrap the Ponzio.
  */
-contract WrappedPonzioTheCat is IWrappedPonzioTheCat, ERC20Permit {
+contract WrappedBaseMillionCat is IWrappedBaseMillionCat, ERC20Permit {
     /// @notice The Ponzio contract.
-    IPonzioTheCat private immutable _asset;
+    IBaseMillionCat private immutable _asset;
     /// @notice The precision factor of the shares of the Ponzio contract.
     uint256 private immutable SHARES_PRECISION_FACTOR;
 
-    constructor(IPonzioTheCat token) ERC20("Wrapped Ponzio The Cat", "WPONZIO") ERC20Permit("Wrapped Ponzio The Cat") {
+    constructor(IBaseMillionCat token) ERC20("Wrapped Ponzio The Cat", "WPONZIO") ERC20Permit("Wrapped Ponzio The Cat") {
         _asset = token;
         SHARES_PRECISION_FACTOR = token.SHARES_PRECISION_FACTOR();
     }
@@ -27,12 +27,12 @@ contract WrappedPonzioTheCat is IWrappedPonzioTheCat, ERC20Permit {
     /*                             external functions                             */
     /* -------------------------------------------------------------------------- */
 
-    /// @inheritdoc IWrappedPonzioTheCat
-    function asset() external view returns (IPonzioTheCat) {
+    /// @inheritdoc IWrappedBaseMillionCat
+    function asset() external view returns (IBaseMillionCat) {
         return _asset;
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function previewWrap(uint256 assets, uint256 newTotalShares, uint256 newTotalSupply)
         external
         view
@@ -41,28 +41,28 @@ contract WrappedPonzioTheCat is IWrappedPonzioTheCat, ERC20Permit {
         amount_ = _asset.tokenToShares(assets, newTotalShares, newTotalSupply) / SHARES_PRECISION_FACTOR;
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function wrap(uint256 assets) external returns (uint256 amount_) {
         amount_ = _wrap(msg.sender, assets, msg.sender);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function wrap(uint256 assets, address receiver) external returns (uint256 amount_) {
         amount_ = _wrap(msg.sender, assets, receiver);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function wrapShares(uint256 shares, address receiver) external returns (uint256 amount_) {
         amount_ = _wrap(msg.sender, _asset.sharesToToken(shares), receiver);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function previewUnwrap(uint256 amount) external view returns (uint256 assets_) {
         uint256 shares = amount * SHARES_PRECISION_FACTOR;
         assets_ = _asset.sharesToToken(shares);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function previewUnwrap(uint256 amount, uint256 newTotalShares, uint256 newTotalSupply)
         external
         view
@@ -72,12 +72,12 @@ contract WrappedPonzioTheCat is IWrappedPonzioTheCat, ERC20Permit {
         assets_ = _asset.sharesToToken(shares, newTotalShares, newTotalSupply);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function unwrap(uint256 amount) external returns (uint256 assets_) {
         assets_ = _unwrap(msg.sender, amount, msg.sender);
     }
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function unwrap(uint256 amount, address receiver) external returns (uint256 assets_) {
         assets_ = _unwrap(msg.sender, amount, receiver);
     }
@@ -86,7 +86,7 @@ contract WrappedPonzioTheCat is IWrappedPonzioTheCat, ERC20Permit {
     /*                              public functions                              */
     /* -------------------------------------------------------------------------- */
 
-    /// @inheritdoc IWrappedPonzioTheCat
+    /// @inheritdoc IWrappedBaseMillionCat
     function previewWrap(uint256 assets) public view returns (uint256 amount_) {
         amount_ = _asset.tokenToShares(assets) / SHARES_PRECISION_FACTOR;
     }

@@ -4,14 +4,14 @@ pragma solidity 0.8.25;
 import { console2 } from "forge-std/Test.sol";
 
 import { USER_1, USER_2, USER_3, USER_4 } from "test/utils/Constants.sol";
-import { PonzioTheCatFixture } from "test/utils/PonzioTheCatFixture.sol";
+import { BaseMillionCatFixture } from "test/utils/BaseMillionCatFixture.sol";
 
 /**
- * @custom:feature Invariants of `PonzioTheCat`
+ * @custom:feature Invariants of `BaseMillionCat`
  * @custom:background Given four users that have 1000 tokens, they can transfer to other users
  * and update the total supply of the token.
  */
-contract TestPonzioTheCatInvariants is PonzioTheCatFixture {
+contract TestBaseMillionCatInvariants is BaseMillionCatFixture {
     uint256 initTimestamp = block.timestamp;
 
     function setUp() public {
@@ -51,7 +51,7 @@ contract TestPonzioTheCatInvariants is PonzioTheCatFixture {
 
         uint256 userSum = ponzio.balanceOf(USER_1) + ponzio.balanceOf(USER_2) + ponzio.balanceOf(USER_3)
             + ponzio.balanceOf(USER_4);
-        uint256 otherSum = ponzio.balanceOf(address(this)) + ponzio.balanceOf(address(wrappedPonzioTheCat))
+        uint256 otherSum = ponzio.balanceOf(address(this)) + ponzio.balanceOf(address(wrappedBaseMillionCat))
             + ponzio.balanceOf(address(ponzio));
 
         assertLe(userSum + otherSum, ponzio.totalSupply(), "sum of user balances <= total supply");

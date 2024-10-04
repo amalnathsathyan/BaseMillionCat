@@ -4,16 +4,16 @@ pragma solidity ^0.8.0;
 import "forge-std/Test.sol";
 
 import { USER_1 } from "test/utils/Constants.sol";
-import { PonzioTheCatFixture } from "test/utils/PonzioTheCatFixture.sol";
+import { BaseMillionCatFixture } from "test/utils/BaseMillionCatFixture.sol";
 
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 import { IERC20Errors } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
  * @title TestPonzioMaxShares
  * @dev Test for Ponzio contract.
  */
-contract TestPonzioMaxShares is PonzioTheCatFixture, IERC20Errors {
+contract TestPonzioMaxShares is BaseMillionCatFixture, IERC20Errors {
     uint256 initialTimestamp;
     uint256 decimals;
 

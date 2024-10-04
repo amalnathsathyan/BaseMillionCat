@@ -2,7 +2,7 @@
 pragma solidity 0.8.25;
 
 import { USER_1, USER_2, USER_3, USER_4 } from "test/utils/Constants.sol";
-import { PonzioTheCatFixture } from "test/utils/PonzioTheCatFixture.sol";
+import { BaseMillionCatFixture } from "test/utils/BaseMillionCatFixture.sol";
 import { IStake } from "src/interfaces/IStake.sol";
 
 /**
@@ -10,7 +10,7 @@ import { IStake } from "src/interfaces/IStake.sol";
  * @custom:background Given four users that can deposit tokens, withdraw, harvest and
  * update the total supply of the token
  */
-contract TestInvariantsStake is PonzioTheCatFixture {
+contract TestInvariantsStake is BaseMillionCatFixture {
     uint256 initTimestamp = block.timestamp;
     uint256 initialAmount = 100 ether;
 
@@ -73,7 +73,7 @@ contract TestInvariantsStake is PonzioTheCatFixture {
                 || stake.userInfo(USER_3).amount != 0 || stake.userInfo(USER_4).amount != 0
         ) {
             assertApproxEqRel(
-                pendingRewardsSum, ponzio.balanceOf(address(wrappedPonzioTheCat)), 9999e14, "pending rewards sum"
+                pendingRewardsSum, ponzio.balanceOf(address(wrappedBaseMillionCat)), 9999e14, "pending rewards sum"
             );
         } else {
             assertEq(pendingRewardsSum, 0, "pending rewards sum");

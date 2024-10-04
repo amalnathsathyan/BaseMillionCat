@@ -6,8 +6,8 @@ import { Script } from "forge-std/Script.sol";
 import { IUniswapV2Factory } from "./../src/interfaces/UniswapV2/IUniswapV2Factory.sol";
 import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.sol";
 
-import { WrappedPonzioTheCat } from "src/WrappedPonzioTheCat.sol";
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { WrappedBaseMillionCat } from "src/WrappedBaseMillionCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 import { Router } from "src/Router.sol";
 import { Stake } from "src/Stake.sol";
 
@@ -18,10 +18,10 @@ contract Deploy is Script {
     function run()
         external
         returns (
-            PonzioTheCat ponzio,
+            BaseMillionCat ponzio,
             Stake stake,
             Router router,
-            WrappedPonzioTheCat wrappedPonzioTheCat,
+            WrappedBaseMillionCat wrappedBaseMillionCat,
             address uniV2PairAddr
         )
     {
@@ -33,15 +33,15 @@ contract Deploy is Script {
 
         vm.startBroadcast(DEPLOYER);
 
-        ponzio = new PonzioTheCat();
-        require(ponzio.balanceOf(DEPLOYER) == ponzio.INITIAL_SUPPLY(), "Invalid balance of PonzioTheCat");
+        ponzio = new BaseMillionCat();
+        require(ponzio.balanceOf(DEPLOYER) == ponzio.INITIAL_SUPPLY(), "Invalid balance of BaseMillionCat");
 
-        wrappedPonzioTheCat = new WrappedPonzioTheCat(ponzio);
+        wrappedBaseMillionCat = new WrappedBaseMillionCat(ponzio);
 
         uniV2PairAddr = _createUniV2Pool(ponzio, ponzio.INITIAL_SUPPLY(), WETH_ADDRESS, ethAmountUniV2, DEPLOYER);
 
         router = new Router(uniV2PairAddr, address(ponzio));
-        stake = new Stake(uniV2PairAddr, address(wrappedPonzioTheCat));
+        stake = new Stake(uniV2PairAddr, address(wrappedBaseMillionCat));
 
         ponzio.initialize(address(stake), uniV2PairAddr);
 
@@ -49,7 +49,7 @@ contract Deploy is Script {
     }
 
     function _createUniV2Pool(
-        PonzioTheCat ponzio,
+        BaseMillionCat ponzio,
         uint256 ponzioAmount,
         address wethAddr,
         uint256 ethAmount,

@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 
 import { Stake } from "src/Stake.sol";
 import { Router } from "src/Router.sol";
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
-import { WrappedPonzioTheCat } from "src/WrappedPonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
+import { WrappedBaseMillionCat } from "src/WrappedBaseMillionCat.sol";
 
 import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.sol";
 import { IUniswapV2Factory } from "src/interfaces/UniswapV2/IUniswapV2Factory.sol";
@@ -18,9 +18,9 @@ import { IUniswapV2Pair } from "src/interfaces/UniswapV2/IUniswapV2Pair.sol";
 contract TestUniswapIntegration is Test {
     Stake public stake;
     Router public router;
-    PonzioTheCat public ponzio;
+    BaseMillionCat public ponzio;
     IUniswapV2Pair public uniV2Pair;
-    WrappedPonzioTheCat public wrappedPonzioTheCat;
+    WrappedBaseMillionCat public wrappedBaseMillionCat;
 
     IUniswapV2Router02 routerUniV2 = IUniswapV2Router02(0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24);
     IUniswapV2Factory uniV2Factory = IUniswapV2Factory(0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6);
@@ -35,10 +35,10 @@ contract TestUniswapIntegration is Test {
         uint256 mainnetFork = vm.createFork(vm.envString("URL_BASE_MAINNET"));
         vm.selectFork(mainnetFork);
 
-        ponzio = new PonzioTheCat();
+        ponzio = new BaseMillionCat();
         decimals = ponzio.decimals();
 
-        wrappedPonzioTheCat = new WrappedPonzioTheCat(ponzio);
+        wrappedBaseMillionCat = new WrappedBaseMillionCat(ponzio);
 
         ponzio.approve(address(routerUniV2), UINT256_MAX);
         routerUniV2.addLiquidityETH{ value: 133.7 ether }(
@@ -53,7 +53,7 @@ contract TestUniswapIntegration is Test {
         uniV2Pair = IUniswapV2Pair(uniV2Factory.getPair(address(ponzio), WETH));
 
         router = new Router(address(uniV2Pair), address(ponzio));
-        stake = new Stake(address(uniV2Pair), address(wrappedPonzioTheCat));
+        stake = new Stake(address(uniV2Pair), address(wrappedBaseMillionCat));
 
         ponzio.initialize(address(stake), address(uniV2Pair));
         amountIn = 145_243 * 10 ** ponzio.decimals();

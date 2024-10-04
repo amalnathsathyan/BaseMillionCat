@@ -17,7 +17,7 @@
 		"test": "forge test -vv",
 		"quicktest": "forge test -vvv --no-match-test invariant",
 		"slither": "slither .",
-		"exportAbi": "forge build --ast && ts-node ./script/exportAbi.ts -g '{PonzioTheCat.sol,Router.sol,Stake.sol}' && tsup ./dist/abi/index.ts --format cjs --format esm --dts --sourcemap",
+		"exportAbi": "forge build --ast && ts-node ./script/exportAbi.ts -g '{BaseMillionCat.sol,Router.sol,Stake.sol}' && tsup ./dist/abi/index.ts --format cjs --format esm --dts --sourcemap",
 		"clean": "rm -rf dist && rm -rf node_modules && rm -rf .coverage && rm -rf out && rm -rf lib && forge clean && npm i && forge install",
 		"deploy:fork": "forge script -f anvil script/Deploy.s.sol"
 	},

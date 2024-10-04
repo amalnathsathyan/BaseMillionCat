@@ -3,7 +3,7 @@ pragma solidity 0.8.25;
 
 import { Test } from "forge-std/Test.sol";
 
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 import { Stake } from "src/Stake.sol";
 /**
  * @title StakeHandler
@@ -14,8 +14,8 @@ contract StakeHandler is Stake, Test {
     mapping(address account => uint256) public lpDeposits;
     mapping(address account => uint256) public lpBalances;
 
-    constructor(address[] memory _actors, address lptoken, address wrappedPonzioTheCat)
-        Stake(lptoken, wrappedPonzioTheCat)
+    constructor(address[] memory _actors, address lptoken, address wrappedBaseMillionCat)
+        Stake(lptoken, wrappedBaseMillionCat)
     {
         // actors = _actors;
     }
@@ -72,7 +72,7 @@ contract StakeHandler is Stake, Test {
     }
 
     function updateTotalSupplyTest(uint256 timeToSkip) external {
-        PonzioTheCat(address(PONZIO)).updateTotalSupply();
+        BaseMillionCat(address(PONZIO)).updateTotalSupply();
 
         skip(bound(timeToSkip, 1 days, 2 weeks));
     }

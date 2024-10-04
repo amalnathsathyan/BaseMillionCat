@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface IRouter {
@@ -34,9 +34,9 @@ interface IRouter {
 
     /**
      * @notice Returns the address of the Ponzio.
-     * @return IPonzioTheCat address of the Ponzio
+     * @return IBaseMillionCat address of the Ponzio
      */
-    function PONZIO() external view returns (IPonzioTheCat);
+    function PONZIO() external view returns (IBaseMillionCat);
 
     /**
      * @notice Update the supply of Ponzio and add liquidity to the pair.

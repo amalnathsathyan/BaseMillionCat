@@ -5,18 +5,18 @@ import "forge-std/Test.sol";
 import { console2 } from "forge-std/console2.sol";
 
 import { USER_1 } from "test/utils/Constants.sol";
-import { PonzioTheCatFixture } from "test/utils/PonzioTheCatFixture.sol";
+import { BaseMillionCatFixture } from "test/utils/BaseMillionCatFixture.sol";
 
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 
 import { Stake } from "src/Stake.sol";
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 
 /**
  * @title TestPonzioMinSupply
  * @dev Test for Ponzio contract when the total supply is at its minimum.
  */
-contract TestPonzioMinSupply is PonzioTheCatFixture {
+contract TestPonzioMinSupply is BaseMillionCatFixture {
     uint256 initialTimestamp;
     uint256 decimals;
     uint256 initialDeposit = 100 ether;
@@ -49,7 +49,7 @@ contract TestPonzioMinSupply is PonzioTheCatFixture {
         assertEq(ponzio.totalSupply(), minSupply);
         uint256 res = (minSupply * ponzio.FEES_STAKING() * (block.timestamp - ts)) / ponzio.HALVING_EVERY()
             / ponzio.FEES_BASE();
-        assertApproxEqAbs(res, ponzio.balanceOf(address(wrappedPonzioTheCat)), 2);
+        assertApproxEqAbs(res, ponzio.balanceOf(address(wrappedBaseMillionCat)), 2);
     }
 
     function test_csv() public {

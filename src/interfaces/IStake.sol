@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.25;
 
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
-import { IWrappedPonzioTheCat } from "src/interfaces/IWrappedPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
+import { IWrappedBaseMillionCat } from "src/interfaces/IWrappedBaseMillionCat.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface IStake {
@@ -84,15 +84,15 @@ interface IStake {
 
     /**
      * @notice Returns the address of the Ponzio.
-     * @return IPonzioTheCat address of the Ponzio
+     * @return IBaseMillionCat address of the Ponzio
      */
-    function PONZIO() external view returns (IPonzioTheCat);
+    function PONZIO() external view returns (IBaseMillionCat);
 
     /**
      * @notice Returns the address of the Ponzio token vault.
-     * @return IWrappedPonzioTheCat address of the Ponzio token vault
+     * @return IWrappedBaseMillionCat address of the Ponzio token vault
      */
-    function WRAPPED_PONZIO() external view returns (IWrappedPonzioTheCat);
+    function WRAPPED_PONZIO() external view returns (IWrappedBaseMillionCat);
 
     /**
      * @notice Returns the staked amount and the reward debt of a user.

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.25;
 
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-interface IWrappedPonzioTheCat is IERC20 {
+interface IWrappedBaseMillionCat is IERC20 {
     /// @notice Returns the underlying asset of the wrapped token.
-    function asset() external view returns (IPonzioTheCat);
+    function asset() external view returns (IBaseMillionCat);
 
     /**
      * @notice Returns the amount of wrapped tokens that will be minted when wrapping the underlying assets given the

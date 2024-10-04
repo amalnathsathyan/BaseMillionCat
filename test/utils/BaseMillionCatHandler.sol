@@ -3,13 +3,13 @@ pragma solidity 0.8.25;
 
 import { Test } from "forge-std/Test.sol";
 
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 
 /**
- * @title PonzioTheCatHandler
+ * @title BaseMillionCatHandler
  * @dev Wrapper to test internal functions and access internal constants, as well as perform invariant testing
  */
-contract PonzioTheCatHandler is PonzioTheCat, Test {
+contract BaseMillionCatHandler is BaseMillionCat, Test {
     // use multiple actors for invariant testing
     address[] public actors;
 
@@ -19,7 +19,7 @@ contract PonzioTheCatHandler is PonzioTheCat, Test {
     // track theoretical shares
     mapping(address account => uint256) public shares;
 
-    constructor(address[] memory _actors) PonzioTheCat() {
+    constructor(address[] memory _actors) BaseMillionCat() {
         actors = _actors;
     }
 

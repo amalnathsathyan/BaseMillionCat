@@ -6,8 +6,8 @@ import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 import { IStake } from "src/interfaces/IStake.sol";
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
-import { IWrappedPonzioTheCat } from "src/interfaces/IWrappedPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
+import { IWrappedBaseMillionCat } from "src/interfaces/IWrappedBaseMillionCat.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.sol";
 
@@ -17,15 +17,15 @@ import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.
  */
 contract Stake is IStake, ReentrancyGuard {
     using Math for uint256;
-    using SafeERC20 for IPonzioTheCat;
+    using SafeERC20 for IBaseMillionCat;
     using SafeERC20 for IERC20;
 
     /// @inheritdoc IStake
     IERC20 public immutable LP_TOKEN;
     /// @inheritdoc IStake
-    IPonzioTheCat public immutable PONZIO;
+    IBaseMillionCat public immutable PONZIO;
     /// @inheritdoc IStake
-    IWrappedPonzioTheCat public immutable WRAPPED_PONZIO;
+    IWrappedBaseMillionCat public immutable WRAPPED_PONZIO;
     /// @inheritdoc IStake
     uint256 public constant PRECISION_FACTOR = 1e18;
 
@@ -41,10 +41,10 @@ contract Stake is IStake, ReentrancyGuard {
     /// @notice the LP_TOKEN balance
     uint256 internal _lpBalance;
 
-    constructor(address lpToken, address wrappedPonzioTheCatAddress) {
+    constructor(address lpToken, address wrappedBaseMillionCatAddress) {
         LP_TOKEN = IERC20(lpToken);
-        WRAPPED_PONZIO = IWrappedPonzioTheCat(wrappedPonzioTheCatAddress);
-        PONZIO = IWrappedPonzioTheCat(wrappedPonzioTheCatAddress).asset();
+        WRAPPED_PONZIO = IWrappedBaseMillionCat(wrappedBaseMillionCatAddress);
+        PONZIO = IWrappedBaseMillionCat(wrappedBaseMillionCatAddress).asset();
     }
 
     receive() external payable { }

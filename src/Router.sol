@@ -8,7 +8,7 @@ import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.s
 
 import { IWETH } from "src/interfaces/IWETH.sol";
 import { IRouter } from "src/interfaces/IRouter.sol";
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { IUniswapV2Pair } from "src/interfaces/UniswapV2/IUniswapV2Pair.sol";
 import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.sol";
@@ -18,21 +18,21 @@ import { IUniswapV2Router02 } from "src/interfaces/UniswapV2/IUniswapV2Router02.
  * @dev This contract is responsible for handling token swaps and liquidity provisions on a UniswapV2 pair.
  */
 contract Router is IRouter, ReentrancyGuard {
-    using SafeERC20 for IPonzioTheCat;
+    using SafeERC20 for IBaseMillionCat;
     using SafeERC20 for IERC20;
 
     /// @inheritdoc IRouter
     IERC20 public immutable LP_TOKEN;
     /// @inheritdoc IRouter
-    IPonzioTheCat public immutable PONZIO;
+    IBaseMillionCat public immutable PONZIO;
     /// @notice the address of the Uniswap V2 Router
     address internal constant UNISWAPV2_ROUTER_ADDR = 0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24;
     /// @notice the address of the WETH token
     address internal constant WETH_ADDR = 0x4200000000000000000000000000000000000006;
 
-    constructor(address lpToken, address ponzioTheCatAddress) {
+    constructor(address lpToken, address BaseMillionCatAddress) {
         LP_TOKEN = IERC20(lpToken);
-        PONZIO = IPonzioTheCat(ponzioTheCatAddress);
+        PONZIO = IBaseMillionCat(BaseMillionCatAddress);
     }
 
     /* -------------------------------------------------------------------------- */

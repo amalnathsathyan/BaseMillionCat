@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 
 import { Stake } from "src/Stake.sol";
 import { Router } from "src/Router.sol";
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
-import { WrappedPonzioTheCat } from "src/WrappedPonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
+import { WrappedBaseMillionCat } from "src/WrappedBaseMillionCat.sol";
 import { UniswapV2Library } from "src/libraries/UniswapV2Library.sol";
 
 import { IWETH } from "src/interfaces/IWETH.sol";
@@ -22,9 +22,9 @@ import { IUniswapV2Factory } from "src/interfaces/UniswapV2/IUniswapV2Factory.so
 contract TestRouterAddLiquidity is Test {
     Stake public stake;
     Router public router;
-    PonzioTheCat public ponzio;
+    BaseMillionCat public ponzio;
     IUniswapV2Pair public uniV2Pair;
-    WrappedPonzioTheCat public wrappedPonzioTheCat;
+    WrappedBaseMillionCat public wrappedBaseMillionCat;
 
     uint256 decimals;
     uint256 mainnetFork;
@@ -37,10 +37,10 @@ contract TestRouterAddLiquidity is Test {
         mainnetFork = vm.createFork(vm.envString("URL_BASE_MAINNET"));
         vm.selectFork(mainnetFork);
 
-        ponzio = new PonzioTheCat();
+        ponzio = new BaseMillionCat();
         decimals = ponzio.decimals();
 
-        wrappedPonzioTheCat = new WrappedPonzioTheCat(ponzio);
+        wrappedBaseMillionCat = new WrappedBaseMillionCat(ponzio);
 
         ponzio.approve(address(routerUniV2), UINT256_MAX);
         routerUniV2.addLiquidityETH{ value: 133.7 ether }(
@@ -51,7 +51,7 @@ contract TestRouterAddLiquidity is Test {
         console.log("Univ2PairAddress", address(uniV2Pair));
 
         router = new Router(address(uniV2Pair), address(ponzio));
-        stake = new Stake(address(uniV2Pair), address(wrappedPonzioTheCat));
+        stake = new Stake(address(uniV2Pair), address(wrappedBaseMillionCat));
 
         uniV2Pair.approve(address(ponzio), UINT256_MAX);
         ponzio.initialize(address(stake), address(uniV2Pair));

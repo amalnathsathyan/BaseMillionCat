@@ -4,17 +4,17 @@ pragma solidity 0.8.25;
 import { USER_1, USER_2, USER_3, USER_4 } from "test/utils/Constants.sol";
 import { BaseFixture } from "test/utils/Fixtures.sol";
 import { FakeUniV2Pair } from "test/utils/FakeUniV2Pair.sol";
-import { PonzioTheCatHandler } from "test/utils/PonzioTheCatHandler.sol";
+import { BaseMillionCatHandler } from "test/utils/BaseMillionCatHandler.sol";
 import { StakeHandler } from "test/utils/StakeHandler.sol";
-import { WrappedPonzioTheCat } from "src/WrappedPonzioTheCat.sol";
+import { WrappedBaseMillionCat } from "src/WrappedBaseMillionCat.sol";
 
 /**
- * @title PonzioTheCatFixture
- * @dev Utils for testing PonzioTheCat.sol
+ * @title BaseMillionCatFixture
+ * @dev Utils for testing BaseMillionCat.sol
  */
-contract PonzioTheCatFixture is BaseFixture {
-    PonzioTheCatHandler public ponzio;
-    WrappedPonzioTheCat public wrappedPonzioTheCat;
+contract BaseMillionCatFixture is BaseFixture {
+    BaseMillionCatHandler public ponzio;
+    WrappedBaseMillionCat public wrappedBaseMillionCat;
     StakeHandler public stake;
     FakeUniV2Pair public uniV2Pair;
 
@@ -29,12 +29,12 @@ contract PonzioTheCatFixture is BaseFixture {
             vm.startPrank(deployer);
         }
 
-        ponzio = new PonzioTheCatHandler(_actors);
-        wrappedPonzioTheCat = new WrappedPonzioTheCat(ponzio);
+        ponzio = new BaseMillionCatHandler(_actors);
+        wrappedBaseMillionCat = new WrappedBaseMillionCat(ponzio);
 
         uniV2Pair = new FakeUniV2Pair();
 
-        stake = new StakeHandler(_actors, address(uniV2Pair), address(wrappedPonzioTheCat));
+        stake = new StakeHandler(_actors, address(uniV2Pair), address(wrappedBaseMillionCat));
 
         uniV2Pair.approve(address(ponzio), UINT256_MAX);
         ponzio.initialize(address(stake), address(uniV2Pair));

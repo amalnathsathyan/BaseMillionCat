@@ -9,14 +9,14 @@ import { SafeCast } from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import { IStake } from "src/interfaces/IStake.sol";
-import { IPonzioTheCat } from "src/interfaces/IPonzioTheCat.sol";
+import { IBaseMillionCat } from "src/interfaces/IBaseMillionCat.sol";
 import { IERC20Rebasable } from "src/interfaces/IERC20Rebasable.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { IUniswapV2Pair } from "src/interfaces/UniswapV2/IUniswapV2Pair.sol";
 import { IERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 /**
- * @title PonzioTheCat
+ * @title BaseMillionCat
  * @notice Implementation of the PONZIO token.
  * @dev PONZIO is a rebasable token, which means that the total supply can be updated. Its particularity is that
  * every 4 days the supply is divided by 2, and in between the supply is constantly decreasing linearly. The balances
@@ -24,34 +24,34 @@ import { IERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/ERC
  * proportionally.
  * At each rebase, 13.37% of the debased supply is sent to the feesCollector.
  */
-contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
+contract BaseMillionCat is IBaseMillionCat, ERC20Rebasable, Ownable {
     using Math for uint256;
     using SafeCast for uint256;
     using SafeERC20 for IERC20;
 
     /// @notice The name of the token
-    string internal constant NAME = "Ponzio The Cat";
+    string internal constant NAME = "Base Million Cat";
     /// @notice The symbol of the token
-    string internal constant SYMBOL = "Ponzio";
+    string internal constant SYMBOL = "BMC";
     /// @notice The number of decimals of the token
     uint8 internal constant DECIMALS = 18;
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant INITIAL_SUPPLY = 21_000_000 * 10 ** DECIMALS; // in wei
     uint256 public constant HALVING_EVERY = 4 days + 144 seconds; // needs a factor of 168 between DEBASE_EVERY and
         // HALVING_EVERY
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant DEBASE_EVERY = 34 minutes + 18 seconds;
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant NB_DEBASE_PER_HALVING = HALVING_EVERY / DEBASE_EVERY;
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant MINIMUM_TOTAL_SUPPLY = 10 ** 12; // in wei
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public immutable DEPLOYED_TIME;
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant FEES_STAKING = 1337; // in BPS = 13.37%
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     uint256 public constant FEES_BASE = 10_000; // in BPS
 
     /// @notice the address of the fees collector
@@ -79,28 +79,28 @@ contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
     /*                             external functions                             */
     /* -------------------------------------------------------------------------- */
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function feesCollector() external view returns (address) {
         return _feesCollector;
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function maxSharesReached() external view returns (bool) {
         return _maxSharesReached;
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function uniswapV2Pair() external view returns (IUniswapV2Pair) {
         return _uniswapV2Pair;
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function setUniswapV2Pair(address uniV2PoolAddr) external onlyOwner {
         _uniswapV2Pair = IUniswapV2Pair(uniV2PoolAddr);
         emit UniV2PoolPairSet(uniV2PoolAddr);
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function setFeesCollector(address feeCollector) external onlyOwner {
         if (!_initialized) {
             revert PONZIO_notInitialized();
@@ -113,14 +113,14 @@ contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
         emit FeesCollectorSet(feeCollector);
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function setBlacklistForUpdateSupply(address addrToBlacklist, bool value) external onlyOwner {
         _blacklistForUpdateSupply[addrToBlacklist] = value;
 
         emit BlacklistForUpdateSupplySet(addrToBlacklist, value);
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function initialize(address feeCollector, address uniV2PoolAddr) external onlyOwner {
         if (_initialized) {
             revert PONZIO_alreadyInitialized();
@@ -141,7 +141,7 @@ contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
         emit FeesCollectorSet(feeCollector);
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function realBalanceOf(address account) external view returns (uint256 balance_) {
         (uint256 newTotalShares, uint256 newTotalSupply,) = computeNewState();
 
@@ -201,7 +201,7 @@ contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
         }
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function computeSupply() public view returns (uint256 totalSupply_, uint256 fees_) {
         uint256 previousTotalSupply = _previousTotalSupply;
 
@@ -237,7 +237,7 @@ contract PonzioTheCat is IPonzioTheCat, ERC20Rebasable, Ownable {
         }
     }
 
-    /// @inheritdoc IPonzioTheCat
+    /// @inheritdoc IBaseMillionCat
     function computeNewState() public view returns (uint256 totalShares_, uint256 totalSupply_, uint256 fees_) {
         uint256 totalShares = _totalShares;
         (totalSupply_, fees_) = computeSupply();

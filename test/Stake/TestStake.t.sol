@@ -5,17 +5,17 @@ import "forge-std/Test.sol";
 
 import { Math } from "@openzeppelin/contracts/utils/math/Math.sol";
 
-import { PonzioTheCatFixture } from "test/utils/PonzioTheCatFixture.sol";
+import { BaseMillionCatFixture } from "test/utils/BaseMillionCatFixture.sol";
 import { USER_1, USER_2 } from "test/utils/Constants.sol";
 
-import { PonzioTheCat } from "src/PonzioTheCat.sol";
+import { BaseMillionCat } from "src/BaseMillionCat.sol";
 import { Stake } from "src/Stake.sol";
 
 /**
  * @title TestStake
  * @dev Test for Stake contract
  */
-contract TestStake is PonzioTheCatFixture {
+contract TestStake is BaseMillionCatFixture {
     using Math for uint256;
 
     uint256 initialTimestamp;
@@ -38,8 +38,8 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(uniV2Pair.totalSupply(), 100_000 ether);
         assertEq(uniV2Pair.balanceOf(address(this)), 100_000 ether);
         // vault
-        assertEq(address(wrappedPonzioTheCat.asset()), address(ponzio));
-        assertEq(wrappedPonzioTheCat.totalSupply(), 0);
+        assertEq(address(wrappedBaseMillionCat.asset()), address(ponzio));
+        assertEq(wrappedBaseMillionCat.totalSupply(), 0);
     }
 
     function test_rewardSoloUser() public {
@@ -55,9 +55,9 @@ contract TestStake is PonzioTheCatFixture {
         stake.sync();
         // ponzio
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)),
+            ponzio.balanceOf(address(wrappedBaseMillionCat)),
             rewardsAmount,
-            "wrappedPonzioTheCat should have rewardsAmount of ponzio"
+            "wrappedBaseMillionCat should have rewardsAmount of ponzio"
         );
         assertEq(ponzio.balanceOf(USER_1), 0, "USER_1 should have 0 ether of ponzio");
         assertEq(ponzio.balanceOf(address(stake)), 0, "stake should have 0 ether of ponzio");
@@ -68,9 +68,9 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(stake.pendingRewards(USER_1), rewardsAmount, "pending rewards should be rewardsAmount ");
         // vault
         assertEq(
-            wrappedPonzioTheCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
+            wrappedBaseMillionCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
         );
-        assertEq(wrappedPonzioTheCat.totalSupply(), rewardsAmount, "stake should have rewardsAmount of ponzioV");
+        assertEq(wrappedBaseMillionCat.totalSupply(), rewardsAmount, "stake should have rewardsAmount of ponzioV");
 
         // ------ HARVEST ------
         uint256 pendingRewards = stake.pendingRewards(USER_1);
@@ -81,7 +81,7 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(ponzio.balanceOf(USER_1), rewardsAmount);
         assertEq(ponzio.balanceOf(USER_1), pendingRewards);
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)), 0, "after harvest, wrappedPonzioTheCat should have 0"
+            ponzio.balanceOf(address(wrappedBaseMillionCat)), 0, "after harvest, wrappedBaseMillionCat should have 0"
         );
         // uniV2Pair
         assertEq(uniV2Pair.balanceOf(address(stake)), initialDeposit);
@@ -89,8 +89,8 @@ contract TestStake is PonzioTheCatFixture {
         // stake
         assertEq(stake.pendingRewards(USER_1), 0);
         // vault
-        assertEq(wrappedPonzioTheCat.balanceOf(address(stake)), 0, "stake should have 0 of ponzioV");
-        assertEq(wrappedPonzioTheCat.totalSupply(), 0, "stake should have 0 of ponzioV");
+        assertEq(wrappedBaseMillionCat.balanceOf(address(stake)), 0, "stake should have 0 of ponzioV");
+        assertEq(wrappedBaseMillionCat.totalSupply(), 0, "stake should have 0 of ponzioV");
 
         // ------ WITHDRAW ------
         stake.withdraw(initialDeposit, USER_1);
@@ -119,9 +119,9 @@ contract TestStake is PonzioTheCatFixture {
         stake.sync();
         // ponzio
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)),
+            ponzio.balanceOf(address(wrappedBaseMillionCat)),
             rewardsAmount,
-            "wrappedPonzioTheCat should have rewardsAmount of ponzio"
+            "wrappedBaseMillionCat should have rewardsAmount of ponzio"
         );
         assertEq(ponzio.balanceOf(USER_1), 0, "USER_1 should have 0 ether of ponzio");
         assertEq(ponzio.balanceOf(USER_2), 0, "USER_2 should have 0 ether of ponzio");
@@ -135,9 +135,9 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(stake.pendingRewards(USER_1), stake.pendingRewards(USER_2));
         // vault
         assertEq(
-            wrappedPonzioTheCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
+            wrappedBaseMillionCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
         );
-        assertEq(wrappedPonzioTheCat.totalSupply(), rewardsAmount, "stake should have rewardsAmount of ponzioV");
+        assertEq(wrappedBaseMillionCat.totalSupply(), rewardsAmount, "stake should have rewardsAmount of ponzioV");
 
         // ------ HARVEST 1 user ------
         uint256 pendingRewards = stake.pendingRewards(USER_1);
@@ -147,9 +147,9 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(ponzio.balanceOf(USER_1), rewardsAmount / 2);
         assertEq(ponzio.balanceOf(USER_1), pendingRewards);
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)),
+            ponzio.balanceOf(address(wrappedBaseMillionCat)),
             rewardsAmount / 2,
-            "After USER_1 harvest, wrappedPonzioTheCat should have rewardsAmount / 2 of ponzio"
+            "After USER_1 harvest, wrappedBaseMillionCat should have rewardsAmount / 2 of ponzio"
         );
 
         // ------ WITHDRAW ------
@@ -164,7 +164,7 @@ contract TestStake is PonzioTheCatFixture {
 
         // ponzio
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)), 0, "after all withdraw, wrappedPonzioTheCat should have 0"
+            ponzio.balanceOf(address(wrappedBaseMillionCat)), 0, "after all withdraw, wrappedBaseMillionCat should have 0"
         );
         assertEq(ponzio.balanceOf(USER_2), rewardsAmount / 2);
         assertEq(ponzio.balanceOf(USER_2), pendingRewards);
@@ -178,9 +178,9 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(stake.pendingRewards(USER_2), 0);
         assertEq(stake.pendingRewards(USER_1), 0);
         // vault
-        assertEq(wrappedPonzioTheCat.balanceOf(address(stake)), 0);
-        assertEq(wrappedPonzioTheCat.totalSupply(), 0);
-        assertEq(wrappedPonzioTheCat.totalSupply(), wrappedPonzioTheCat.balanceOf(address(stake)));
+        assertEq(wrappedBaseMillionCat.balanceOf(address(stake)), 0);
+        assertEq(wrappedBaseMillionCat.totalSupply(), 0);
+        assertEq(wrappedBaseMillionCat.totalSupply(), wrappedBaseMillionCat.balanceOf(address(stake)));
     }
 
     function test_multipleRewards() public {
@@ -201,12 +201,12 @@ contract TestStake is PonzioTheCatFixture {
         stake.sync();
 
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)),
+            ponzio.balanceOf(address(wrappedBaseMillionCat)),
             rewardsAmount,
-            "wrappedPonzioTheCat should have rewardsAmount of ponzio"
+            "wrappedBaseMillionCat should have rewardsAmount of ponzio"
         );
         assertEq(
-            wrappedPonzioTheCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
+            wrappedBaseMillionCat.balanceOf(address(stake)), rewardsAmount, "stake should have rewardsAmount of ponzioV"
         );
         assertEq(uniV2Pair.balanceOf(address(stake)), 2 * initialDeposit);
         assertEq(stake.pendingRewards(USER_1), rewardsAmount / 2);
@@ -232,7 +232,7 @@ contract TestStake is PonzioTheCatFixture {
         // ponzio
         assertEq(ponzio.balanceOf(USER_2), pendingRewards);
         assertEq(
-            ponzio.balanceOf(address(wrappedPonzioTheCat)), 0, "after all withdraw, wrappedPonzioTheCat should have 0"
+            ponzio.balanceOf(address(wrappedBaseMillionCat)), 0, "after all withdraw, wrappedBaseMillionCat should have 0"
         );
         // USER_2 should have rewardsAmount + rewardsAmount / 2 - rewards for the initial deposit
         assertEq(ponzio.balanceOf(USER_2), rewardsAmount * 3 / 2);
@@ -246,8 +246,8 @@ contract TestStake is PonzioTheCatFixture {
         assertEq(0, stake.pendingRewards(USER_2));
         assertEq(0, stake.pendingRewards(USER_1));
         // vault
-        assertEq(wrappedPonzioTheCat.balanceOf(address(stake)), 0);
-        assertEq(wrappedPonzioTheCat.totalSupply(), 0);
+        assertEq(wrappedBaseMillionCat.balanceOf(address(stake)), 0);
+        assertEq(wrappedBaseMillionCat.totalSupply(), 0);
     }
 
     function test_pendingRewards() public {
